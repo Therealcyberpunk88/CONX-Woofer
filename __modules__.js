@@ -19,24 +19,7 @@ var loadModules = function (modules, urlPrefix, doneCallback) { // eslint-disabl
             });
 
             if (!m.hasOwnProperty('preload') || m.preload) {
-                if (m.moduleName === 'BASIS') {
-                    // preload basis transcoder
-                    pc.basisInitialize();
-                    moduleLoaded();
-                } else if (m.moduleName === 'DracoDecoderModule') {
-                    // preload draco decoder
-                    if (pc.dracoInitialize) {
-                        // 1.63 onwards
-                        pc.dracoInitialize();
-                        moduleLoaded();
-                    } else {
-                        // 1.62 and earlier
-                        pc.WasmModule.getInstance(m.moduleName, () => { moduleLoaded(); });
-                    }
-                } else {
-                    // load remaining modules in global scope
-                    pc.WasmModule.getInstance(m.moduleName, () => { moduleLoaded(); });
-                }
+                pc.WasmModule.getInstance(m.moduleName, () => { moduleLoaded(); });
             } else {
                 moduleLoaded();
             }
